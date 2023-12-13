@@ -1,21 +1,28 @@
-name: Pre-generate preview link
-
-permissions:
-  pull-requests: write
-
+name: test
 on:
-  pull_request:
-    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'run workflow using api'
+        default: 'test'
+        required: true
 
-concurrency:
-  group: cloudflare-pages-verify-${{ github.head_ref }}
-  cancel-in-progress: true
+env:
+  var_1: "valueofvar1"
 
 jobs:
-  upload_pr_info:
-    runs-on: Ubuntu-latest
+  test_flow:
+    runs-on: ubuntu-latest
     steps:
-      - name: Retrieve PR information
-        run: |
-          echo ${{ github.event.number }}
-          echo ${{ github.event.pull_request.user.login }}
+
+      - name: check out action
+        uses: actions/checkout@v2
+        
+      - name: run test
+        run: bash script/commit.bash
+   
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                branch: ${{ github.ref }}
