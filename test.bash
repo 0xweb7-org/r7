@@ -1,1 +1,1 @@
-echo "$HOME x"
+echo "$HOME xyzzzz"
